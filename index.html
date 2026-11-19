@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>工業的製法 暗記ラボ</title>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f6f7;--card:#fff;--ink:#12303c;--mut:#5b7480;--ac:#0e7c86;--cat:#c78f0c;--ok:#1f8a4c;--ng:#c4412f;--line:#cddbe0;--kb:#e3edf0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1d24;--card:#162832;--ink:#e6f0f3;--mut:#93aab4;--ac:#4cc3cf;--cat:#e8b73c;--ok:#52c98a;--ng:#ff8a76;--line:#2b4350;--kb:#1b323d}}
+:root[data-theme="dark"]{--bg:#0f1d24;--card:#162832;--ink:#e6f0f3;--mut:#93aab4;--ac:#4cc3cf;--cat:#e8b73c;--ok:#52c98a;--ng:#ff8a76;--line:#2b4350;--kb:#1b323d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.7 "Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",sans-serif}
+main{max-width:760px;margin:0 auto;padding:16px 14px 24px}
+h1{font-size:22px;font-weight:900;margin:4px 0 12px}
+h2{font-size:20px;font-weight:900;margin:14px 0 4px}
+.nav{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.nav button,.tabs button{font:700 14px inherit;font-family:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 12px;border-radius:8px;white-space:nowrap;cursor:pointer}
+.nav button[aria-pressed=true]{background:var(--ac);color:#fff;border-color:var(--ac)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 10px}
+.tabs button[aria-pressed=true]{border-color:var(--ac);box-shadow:inset 0 -3px 0 var(--ac)}
+.sub{color:var(--mut);margin:0 0 8px}
+ul.pts{margin:0;padding:12px 14px 12px 30px;background:var(--card);border-left:4px solid var(--ac);border-radius:0 8px 8px 0}
+.st{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0}
+.st.done{border-color:var(--ok)}
+.hd{font-size:14px;color:var(--mut);margin-bottom:6px}.hd b{color:var(--ink)}
+.eq{display:flex;flex-wrap:wrap;align-items:flex-end;gap:6px;font-size:19px;line-height:2.1}
+.eq sub{font-size:.7em}
+.pl{padding:0 2px}
+.ar{display:inline-flex;flex-direction:column;align-items:center;min-width:56px}
+.ct{font-size:15px;min-height:26px;color:var(--cat);font-weight:700;line-height:1.5;display:flex;align-items:center}
+.arr{font-size:24px;line-height:1;cursor:pointer;user-select:none}
+.f{display:inline-block;min-width:34px;min-height:36px;padding:0 6px;border-bottom:2px solid var(--ac);background:color-mix(in srgb,var(--ac) 9%,transparent);border-radius:4px 4px 0 0;outline:none;line-height:34px;vertical-align:bottom}
+.f[data-e]::before{content:attr(data-ph);color:var(--mut);font-size:12px}
+.f.act{background:color-mix(in srgb,var(--ac) 25%,transparent)}
+.ct .f{border:2px dashed var(--cat);border-radius:6px;min-width:60px;min-height:32px;line-height:28px;font-size:15px}
+.f.ok{border-color:var(--ok);color:var(--ok)}.f.ng{border-color:var(--ng);color:var(--ng)}
+.cr{display:inline-block;width:2px;height:1.1em;background:var(--ink);vertical-align:middle;animation:b 1s steps(1) infinite}
+@keyframes b{50%{opacity:0}}@media (prefers-reduced-motion:reduce){.cr{animation:none}}
+.ac{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.ac button{font:700 14px inherit;font-family:inherit;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:6px 14px;cursor:pointer}
+.ac .chk{background:var(--ac);color:#fff;border-color:var(--ac)}
+.rs{margin-top:6px;font-size:15px}.rs .eq{font-size:17px;background:color-mix(in srgb,var(--ok) 10%,transparent);padding:4px 10px;border-radius:8px}
+.good{color:var(--ok);font-weight:700}.bad{color:var(--ng);font-weight:700}
+.kb{position:sticky;bottom:0;z-index:5;background:var(--kb);border-top:1px solid var(--line);padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px))}
+.kb div{display:flex;gap:4px;justify-content:center;margin-bottom:4px;flex-wrap:wrap}
+.kb button{font:700 16px inherit;font-family:inherit;min-width:38px;height:38px;padding:0 8px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;touch-action:manipulation}
+.kb .el{color:var(--ac)}.kb .ctl{background:var(--cat);color:#fff;border-color:var(--cat)}.kb .dl{color:var(--ng)}
+.kb sub{font-size:.65em}
+.note{font-size:13px;color:var(--mut);margin:6px 0 0}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+</style></head><body>
+<main>
+<h1>工業的製法 暗記ラボ</h1>
+<div class="nav" id="nav"></div>
+<div id="main"></div>
+</main>
+<div class="kb" id="kb" aria-label="化学式キーボード">
+<div>
+<button class="el">H</button><button class="el">C</button><button class="el">N</button><button class="el">O</button><button class="el">S</button><button class="el">V</button><button class="el">Na</button><button class="el">Cl</button><button class="el">Ca</button><button class="el">Fe</button><button class="el">Pt</button>
+</div>
+<div>
+<button>1</button><button>2</button><button>3</button><button>4</button><button>5</button><button>6</button><button>7</button><button>8</button><button>9</button><button>0</button><button>(</button><button>)</button><button>.</button>
+</div>
+<div>
+<button data-t=" + ">＋</button><button data-ar="→">→</button><button data-ar="⇄">⇄</button>
+<button class="ctl" data-j="L">左辺</button><button class="ctl" data-j="C">触媒枠</button><button class="ctl" data-j="R">右辺</button>
+<button data-x="bs">⌫</button><button class="dl" data-x="cl">消す</button>
+</div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const fmt=(s,num)=>{let o='',co=true;for(const c of s){if(c===' '){o+=' ';co=true;continue}if(/\d/.test(c)){o+=(num||co)?c:'<sub>'+c+'</sub>';continue}co=false;o+=c}return o};
+const nm=s=>(s||'').replace(/\s/g,'');
+// [式番号, 説明, 左辺, 右辺, 触媒(許容リスト)|null, 可逆]
+const P=[
+{n:'ハーバー・ボッシュ法',s:'アンモニア NH3',
+ pts:['窒素N2と水素H2から、直接アンモニアNH3を合成する','触媒は四酸化三鉄Fe3O4から得られる鉄が主成分（実際に働くのは水素で還元された単体の鉄）','可逆反応なので矢印は ⇄（式44）','未反応のN2とH2は循環させ、NH3は冷却して液体で取り出す','NH3の性質：無色・刺激臭・空気より軽い・水に溶けやすく弱塩基性'],
+ steps:[['(44)','窒素と水素からアンモニアを直接合成する',[[1,'N2'],[3,'H2']],[[2,'NH3']],['Fe3O4','Fe'],1]]},
+{n:'オストワルト法',s:'硝酸 HNO3',
+ pts:['原料はアンモニア。3段階でHNO3にする','① NH3を酸化してNOにする（触媒は白金Pt、約800℃の白金網にNH3と空気の混合気体を通す）','② NOを空気中のO2で酸化してNO2にする','③ NO2を温水に吸収させてHNO3にする（冷水だと 2NO2 + H2O → HNO3 + HNO2 亜硝酸）','式(50)で生じたNOは式(49)(50)をくり返してすべてHNO3に変える'],
+ steps:[['(48)','アンモニアを酸化して一酸化窒素をつくる',[[4,'NH3'],[5,'O2']],[[4,'NO'],[6,'H2O']],['Pt'],0],
+ ['(49)','一酸化窒素を空気中の酸素で酸化して二酸化窒素にする',[[2,'NO'],[1,'O2']],[[2,'NO2']],null,0],
+ ['(50)','二酸化窒素を温水に吸収させて硝酸にする',[[3,'NO2'],[1,'H2O']],[[2,'HNO3'],[1,'NO']],null,0]],
+ all:['まとめ','(48)〜(50)を1つの式にまとめる（NOとNO2が消える）',[[1,'NH3'],[2,'O2']],[[1,'HNO3'],[1,'H2O']],null,0],
+ hint:'(48)×1 + (49)×3 + (50)×2 を足して、両辺のNOとNO2を消す → 4NH3 + 8O2 + 2H2O → 4HNO3 + 6H2O → 整理して係数を最小の整数比に。'},
+{n:'接触法',s:'硫酸 H2SO4',
+ pts:['原料は二酸化硫黄SO2（硫黄の燃焼で得る）','① SO2を酸化バナジウム(V) V2O5を触媒に、空気中のO2で酸化して三酸化硫黄SO3にする','② SO3を濃硫酸に吸収させて発煙硫酸とし、希硫酸で薄めて濃硫酸にする','SO3は常温で無色針状の結晶で、昇華しやすい'],
+ steps:[['燃焼','硫黄を燃焼させて二酸化硫黄をつくる',[[1,'S'],[1,'O2']],[[1,'SO2']],null,0],
+ ['(39)','二酸化硫黄を空気中の酸素で酸化して三酸化硫黄をつくる',[[2,'SO2'],[1,'O2']],[[2,'SO3']],['V2O5'],0],
+ ['(40)','三酸化硫黄を水と反応させて硫酸にする',[[1,'SO3'],[1,'H2O']],[[1,'H2SO4']],null,0]],
+ all:['まとめ','硫黄Sから硫酸まで3つの反応を1つの式にまとめる',[[2,'S'],[3,'O2'],[2,'H2O']],[[2,'H2SO4']],null,0],
+ hint:'燃焼式×2 + (39) + (40)×2 を足して、SO2とSO3を消す → 2S + 3O2 + 2H2O → 2H2SO4'},
+{n:'アンモニアソーダ法',s:'炭酸ナトリウム Na2CO3',
+ pts:['NaClの飽和水溶液にアンモニアを吸収させ、CO2を通すと、溶解度の小さいNaHCO3が沈殿する（式5）','沈殿を加熱（熱分解）するとNa2CO3が生成（式6）','CO2とNH3を回収して再利用する点が特徴（ソルベー法）','図7：CaCO3の熱分解でCO2とCaOを得て、CaOからCa(OH)2をつくり、NH4ClからNH3を回収する。副生成物はCaCl2'],
+ steps:[['(5)','飽和食塩水にNH3とCO2を吸収させる',[[1,'NaCl'],[1,'H2O'],[1,'NH3'],[1,'CO2']],[[1,'NaHCO3'],[1,'NH4Cl']],null,0],
+ ['(6)','沈殿を加熱して炭酸ナトリウムをつくる',[[2,'NaHCO3']],[[1,'Na2CO3'],[1,'H2O'],[1,'CO2']],null,0],
+ ['図7','石灰石を熱分解する',[[1,'CaCO3']],[[1,'CaO'],[1,'CO2']],null,0],
+ ['図7','酸化カルシウムに水を加える',[[1,'CaO'],[1,'H2O']],[[1,'Ca(OH)2']],null,0],
+ ['図7','NH4ClからNH3を回収する',[[1,'Ca(OH)2'],[2,'NH4Cl']],[[1,'CaCl2'],[2,'NH3'],[2,'H2O']],null,0]],
+ all:['まとめ','5つの反応を1つにまとめる（NH3・CO2などはくり返し使われて消える）',[[2,'NaCl'],[1,'CaCO3']],[[1,'Na2CO3'],[1,'CaCl2']],null,0],
+ hint:'(5)×2 + (6) + 図7の3式を足して、NH3・CO2・H2O・NH4Cl・NaHCO3・CaO・Ca(OH)2を消す → 2NaCl + CaCO3 → Na2CO3 + CaCl2',
+ calc:1}
+];
+let cur=0,mode='1',act=null;const done=new Set();
+const bl=a=>`<span class="f" tabindex="0" data-a="${a}"></span>`;
+const arrow=(st,ct)=>`<span class="ar"><span class="ct">${ct}</span><span class="arr">${st[5]?'⇄':'→'}</span></span>`;
+const pl='<span class="pl">+</span>';
+const T=(c,f)=>(c>1?c:'')+fmt(f);
+const sideS=a=>a.map(([c,f])=>T(c,f)).join(pl);
+const stat=st=>sideS(st[2])+arrow(st,st[4]?fmt(st[4][0]):'')+sideS(st[3]);
+function eq(st,m){
+ if(m==='1')return st[2].map(([c,f])=>(c>1?c:'')+bl(f)).join(pl)+arrow(st,st[4]?bl(st[4].join('|')):'')+st[3].map(([c,f])=>(c>1?bl(c):'')+fmt(f)).join(pl);
+ return `<span class="f" data-r="L" data-ph="左辺"></span>`+arrow(st,`<span class="f" data-r="C" data-ph="触媒"></span>`).replace('arr"','arr" data-flip="1"')+`<span class="f" data-r="R" data-ph="右辺"></span>`;
+}
+function paint(f){const v=f.dataset.v||'';f.innerHTML=fmt(v,f.hasAttribute('data-num'))+(f===act?'<i class="cr"></i>':'');f.classList.toggle('act',f===act);if(v)f.removeAttribute('data-e');else f.setAttribute('data-e','1')}
+function setAct(f){const o=act;act=f;if(o)paint(o);if(f)paint(f)}
+function put(t){if(!act)return;act.dataset.v=(act.dataset.v||'')+t;act.classList.remove('ok','ng');paint(act)}
+function bs(){if(!act)return;let v=act.dataset.v||'';act.dataset.v=v.endsWith(' + ')?v.slice(0,-3):v.slice(0,-1);act.classList.remove('ok','ng');paint(act)}
+function nav(){$('#nav').innerHTML=P.map((p,i)=>`<button data-p="${i}" aria-pressed="${i===cur}">${p.n}</button>`).join('')}
+function modes(p){const a=[['1','レベル1 穴埋め'],['2','レベル2 全部書く']];if(p.all)a.push(['3','まとめ式']);if(p.calc)a.push(['4','計算問題']);return a}
+function cnt(m,p){const n=m==='3'?1:p.steps.length;let c=0;for(let i=0;i<n;i++)if(done.has(cur+m+i))c++;return m==='4'?(done.has(cur+'4')?'1/1':'0/1'):c+'/'+n}
+function show(){
+ const p=P[cur];nav();act=null;
+ if(!modes(p).some(x=>x[0]===mode))mode='1';
+ $('#main').innerHTML=`<h2>${p.n}</h2><p class="sub">${fmt(p.s)}</p><ul class="pts">${p.pts.map(t=>`<li>${fmt(t.replace(/([A-Za-z])(\d)/g,'$1$2'))}</li>`).join('')}</ul>
+ <div class="tabs">${modes(p).map(m=>`<button data-m="${m[0]}" aria-pressed="${m[0]===mode}">${m[1]}（${cnt(m[0],p)}）</button>`).join('')}</div><div id="cards"></div>`;
+ cards();
+}
+function cards(){
+ const p=P[cur];let h='';
+ if(mode==='4'){
+  h=`<div class="st" data-m="4"><div class="hd"><b>問1</b> 1.0 kgの炭酸ナトリウム無水塩を製造するには、塩化ナトリウムは何kg必要か。（NaCl = 58.5、Na2CO3 = 106）。小数第1位まで。</div><div class="eq"><span class="f" data-num="1" data-ph="kg" data-a="1.1"></span> kg</div><div class="ac"><button class="chk">判定</button><button class="ans">答えを見る</button></div><div class="rs"></div></div>`;
+ }else{
+  const L=mode==='3'?[p.all]:p.steps;
+  h=L.map((st,i)=>`<div class="st${done.has(cur+mode+(mode==='3'?0:i))?' done':''}" data-m="${mode}" data-i="${mode==='3'?'a':i}"><div class="hd"><b>${st[0]}</b>　${st[1]}</div><div class="eq">${eq(st,mode)}</div><div class="ac"><button class="chk">判定</button><button class="ans">答えを見る</button>${mode==='3'?'<button class="hint">ヒント</button>':''}</div><div class="rs"></div></div>`).join('');
+  h+=`<p class="note">${mode==='1'?'青い下線の空欄をタップして、下のキーボードで入力します。触媒は点線の枠です。':'左辺・右辺・触媒枠をタップして入力。矢印は⇄／→ボタンかタップで切り替え。触媒がない反応は枠を空欄にします。'}</p>`;
+ }
+ $('#cards').innerHTML=h;$('#cards').querySelectorAll('.f').forEach(paint);
+}
+const parse=t=>{const M={};for(const x of nm(t).split('+')){if(!x)continue;const r=x.match(/^(\d*)(.+)$/);M[r[2]]=(M[r[2]]||0)+(+r[1]||1)}return M};
+const key=M=>JSON.stringify(Object.entries(M).sort());
+const toM=a=>{const M={};a.forEach(([c,f])=>M[f]=(M[f]||0)+c);return M};
+function check(card){
+ const m=card.dataset.m,rs=card.querySelector('.rs');let ok=true,bad=[];
+ const mark=(f,g)=>{f.classList.remove('ok','ng');f.classList.add(g?'ok':'ng');if(!g)ok=false};
+ if(m==='4'){const f=card.querySelector('.f');const v=parseFloat(f.dataset.v);mark(f,Math.abs(v-1.1)<=0.05);
+  rs.innerHTML=ok?'<span class="good">正解！</span> 2NaCl → Na2CO3 より NaCl は 2×58.5 = 117 g で Na2CO3 106 g。1.0 kg×117/106 ≒ 1.1 kg'.replace(/([A-Za-z])(\d)/g,'$1<sub>$2</sub>'):'<span class="bad">もう一度。</span>反応の係数比（NaCl : Na2CO3 = 2 : 1）に注目。'.replace(/([A-Za-z])(\d)/g,'$1<sub>$2</sub>');
+  if(ok)done.add(cur+'4');upd();return}
+ const st=getStep(card);
+ if(m==='1'){card.querySelectorAll('.f').forEach(f=>mark(f,f.dataset.a.split('|').includes(nm(f.dataset.v))))}
+ else{
+  const g=r=>card.querySelector(`[data-r=${r}]`);
+  const a=key(parse(g('L').dataset.v))===key(toM(st[2])),b=key(parse(g('R').dataset.v))===key(toM(st[3]));
+  const c=st[4]?st[4].includes(nm(g('C').dataset.v)):nm(g('C').dataset.v)==='';
+  const d=(card.querySelector('.arr').textContent==='⇄')===!!st[5];
+  mark(g('L'),a);mark(g('R'),b);mark(g('C'),c);if(!d){ok=false;bad.push('矢印')}
+  if(!a)bad.push('左辺');if(!b)bad.push('右辺');if(!c)bad.push(st[4]?'触媒':'触媒（この反応は触媒なし）');
+ }
+ rs.innerHTML=ok?'<span class="good">正解！</span>':'<span class="bad">まちがいがあります。</span>'+(bad.length?' 見直し：'+bad.join('・'):'')+'（赤い欄）';
+ if(ok){done.add(cur+m+(m==='3'?0:card.dataset.i));card.classList.add('done')}
+ upd();
+}
+function upd(){document.querySelectorAll('.tabs button').forEach(b=>{const m=b.dataset.m;b.textContent=modes(P[cur]).find(x=>x[0]===m)[1]+'（'+cnt(m,P[cur])+'）'})}
+function getStep(card){return card.dataset.i==='a'?P[cur].all:P[cur].steps[+card.dataset.i]}
+document.addEventListener('click',e=>{
+ const t=e.target;
+ let b=t.closest('[data-p]');if(b){cur=+b.dataset.p;show();return}
+ b=t.closest('.tabs [data-m]');if(b){mode=b.dataset.m;show();return}
+ const f=t.closest('.f');if(f){setAct(f);return}
+ const card=t.closest('.st');
+ if(t.closest('.chk'))return check(card);
+ if(t.closest('.ans')){const rs=card.querySelector('.rs');rs.innerHTML=card.dataset.m==='4'?'答え：約1.1 kg（2×58.5 ÷ 106 ≒ 1.10）':'<div class="eq">'+stat(getStep(card))+'</div>';return}
+ if(t.closest('.hint')){card.querySelector('.rs').textContent=P[cur].hint;return}
+ const ar=t.closest('.arr[data-flip]');if(ar){ar.textContent=ar.textContent==='→'?'⇄':'→';return}
+});
+$('#kb').addEventListener('mousedown',e=>e.preventDefault());
+$('#kb').addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;
+ const d=b.dataset;
+ if(d.x==='bs')bs();else if(d.x==='cl'){if(act){act.dataset.v='';act.classList.remove('ok','ng');paint(act)}}
+ else if(d.ar){const a=act&&act.closest('.eq')&&act.closest('.eq').querySelector('.arr[data-flip]');if(a)a.textContent=d.ar}
+ else if(d.j){const q=act&&act.closest('.eq');const f=q&&q.querySelector(`[data-r=${d.j}]`);if(f)setAct(f)}
+ else put(d.t!==undefined?d.t:b.textContent);
+});
+document.addEventListener('keydown',e=>{
+ if(!act||e.ctrlKey||e.metaKey)return;
+ if(e.key==='Backspace'){e.preventDefault();bs()}
+ else if(e.key==='+'){e.preventDefault();put(' + ')}
+ else if(/^[A-Za-z0-9().]$/.test(e.key)){e.preventDefault();put(e.key)}
+});
+document.querySelectorAll('#kb .el,#kb button').forEach(b=>{if(/^[A-Z]/.test(b.textContent)&&b.className==='el')b.dataset.t=b.textContent});
+show();
+</script>
+</body></html>
