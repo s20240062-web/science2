@@ -25,6 +25,7 @@ ul.pts{margin:0;padding:12px 14px 12px 30px;background:var(--card);border-left:4
 .hd{font-size:14px;color:var(--mut);margin-bottom:6px}.hd b{color:var(--ink)}
 .eq{display:flex;flex-wrap:wrap;align-items:flex-end;gap:6px;font-size:19px;line-height:2.1}
 .eq sub{font-size:.7em}
+.dq{font:inherit;font-size:16px;color:var(--ink);background:color-mix(in srgb,var(--ac) 9%,var(--card));border:0;border-bottom:2px solid var(--ac);border-radius:4px 4px 0 0;padding:3px 4px;margin:0 2px;max-width:100%}.dq.ok{border-color:var(--ok);color:var(--ok)}.dq.ng{border-color:var(--ng);color:var(--ng)}
 .pl{padding:0 2px}.fm{white-space:nowrap}
 .ar{display:inline-flex;flex-direction:column;align-items:center;min-width:56px}
 .ct{font-size:15px;min-height:26px;color:var(--cat);font-weight:700;line-height:1.5;display:flex;align-items:center}
@@ -103,7 +104,23 @@ const P=[
  hint:'(5)×2 + (6) + 図7の3式を足して、NH3・CO2・H2O・NH4Cl・NaHCO3・CaO・Ca(OH)2を消す → 2NaCl + CaCO3 → Na2CO3 + CaCl2',
  calc:1}
 ];
-const pool=p=>p.all?[...p.steps,p.all]:p.steps;const XM={};const sb=t=>t.replace(/([A-Za-z])(\d)/g,'$1<sub>$2</sub>');
+const pool=p=>p.all?[...p.steps,p.all]:p.steps;const XM={};
+const Q={
+'窒素と水素からアンモニアを直接合成する':'{窒素|酸素|二酸化炭素}と{水素|塩素|ヘリウム}から{アンモニア|硝酸|尿素}を直接合成する',
+'アンモニアを酸化して一酸化窒素をつくる':'{アンモニア|窒素|一酸化窒素}を{酸化|還元|中和}して{一酸化窒素|二酸化窒素|硝酸}をつくる',
+'一酸化窒素を空気中の酸素で酸化して二酸化窒素にする':'{一酸化窒素|アンモニア|二酸化窒素}を空気中の{酸素|窒素|水素}で酸化して{二酸化窒素|硝酸|一酸化窒素}にする',
+'二酸化窒素を温水に吸収させて硝酸にする':'{二酸化窒素|一酸化窒素|アンモニア}を{温水|冷水|濃硫酸}に吸収させて{硝酸|亜硝酸|硫酸}にする',
+'硫黄を燃焼させて二酸化硫黄をつくる':'{硫黄|窒素|炭素}を{燃焼|還元|分解}させて{二酸化硫黄|三酸化硫黄|硫化水素}をつくる',
+'二酸化硫黄を空気中の酸素で酸化して三酸化硫黄をつくる':'{二酸化硫黄|三酸化硫黄|硫化水素}を空気中の{酸素|水素|窒素}で酸化して{三酸化硫黄|二酸化硫黄|硫酸}をつくる',
+'三酸化硫黄を水と反応させて硫酸にする':'{三酸化硫黄|二酸化硫黄|硫化水素}を水と反応させて{硫酸|亜硫酸|発煙硫酸}にする',
+'飽和食塩水にNH3とCO2を吸収させる':'{飽和食塩水|石灰水|海水}に{NH3|NO2|HCl}と{CO2|SO2|O2}を吸収させる',
+'沈殿を加熱して炭酸ナトリウムをつくる':'{沈殿|ろ液|食塩水}を{加熱|冷却|電気分解}して{炭酸ナトリウム|炭酸水素ナトリウム|水酸化ナトリウム}をつくる',
+'石灰石を熱分解する':'{石灰石|石灰水|生石灰}を{熱分解|電気分解|中和}する',
+'酸化カルシウムに水を加える':'{酸化カルシウム|炭酸カルシウム|水酸化カルシウム}に{水|塩酸|二酸化炭素}を加える',
+'NH4ClからNH3を回収する':'{NH4Cl|NaCl|CaCl2}から{NH3|CO2|HCl}を回収する'
+};
+const subU=t=>t.replace(/([A-Za-z)])(\d)/g,(m,a,d)=>a+'₀₁₂₃₄₅₆₇₈₉'[d]);
+const qH=d=>Q[d].replace(/\{([^}]+)\}/g,(_,g)=>{const o=g.split('|'),a=o[0];const sh=o.map(x=>[Math.random(),x]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);return `<select class="dq" data-a="${a}"><option value="">　？　</option>${sh.map(x=>`<option value="${x}">${subU(x)}</option>`).join('')}</select>`});const sb=t=>t.replace(/([A-Za-z])(\d)/g,'$1<sub>$2</sub>');
 let XU=false;try{XU=localStorage.getItem('kx')==='1'}catch(e){}
 let cur=0,mode='1',act=null;const done=new Set();
 const bl=a=>`<span class="f" tabindex="0" data-a="${a}"></span>`;
@@ -153,8 +170,8 @@ function cards(){
   h=`<div class="st" data-m="4"><div class="hd"><b>問1</b> 1.0 kgの炭酸ナトリウム無水塩を製造するには、塩化ナトリウムは何kg必要か。（NaCl = 58.5、Na2CO3 = 106）。小数第1位まで。</div><div class="eq"><span class="f" data-num="1" data-ph="kg" data-a="1.1"></span> kg</div><div class="ac"><button class="chk">判定</button><button class="ans">答えを見る</button></div><div class="rs"></div></div>`;
  }else{
   const L=mode==='3'?[p.all]:p.steps;
-  h=L.map((st,i)=>`<div class="st${done.has(cur+mode+(mode==='3'?0:i))?' done':''}" data-m="${mode}" data-i="${mode==='3'?'a':i}"><div class="hd"><b>${st[0]}</b>　${sb(st[1])}</div><div class="eq">${eq(st,mode)}</div><div class="ac"><button class="chk">判定</button><button class="ans">答えを見る</button>${mode==='3'?'<button class="hint">ヒント</button>':''}</div><div class="rs"></div></div>`).join('');
-  h+=`<p class="note">${mode==='1'?'青い下線の空欄をタップして、下のキーボードで入力します。触媒は点線の枠です。':'左辺・右辺・触媒枠をタップして入力。矢印は⇄／→ボタンかタップで切り替え。触媒がない反応は枠を空欄にします。'}</p>`;
+  h=L.map((st,i)=>`<div class="st${done.has(cur+mode+(mode==='3'?0:i))?' done':''}" data-m="${mode}" data-i="${mode==='3'?'a':i}"><div class="hd"><b>${st[0]}</b>　${mode==='2'&&Q[st[1]]?qH(st[1]):sb(st[1])}</div><div class="eq">${eq(st,mode)}</div><div class="ac"><button class="chk">判定</button><button class="ans">答えを見る</button>${mode==='3'?'<button class="hint">ヒント</button>':''}</div><div class="rs"></div></div>`).join('');
+  h+=`<p class="note">${mode==='1'?'青い下線の空欄をタップして、下のキーボードで入力します。触媒は点線の枠です。':'左辺・右辺・触媒枠をタップして入力。矢印は⇄／→ボタンかタップで切り替え。触媒がない反応は枠を空欄にします。反応の説明文の空欄は、選択肢から選びます。'}</p>`;
  }
  $('#cards').innerHTML=h;$('#cards').querySelectorAll('.f').forEach(paint);
  if(mode==='X'){const mx=XM[cur]||{};const sv=a=>a.map(([n,f])=>(n>1?n:'')+f).join(' + ');document.querySelectorAll('#cards .st').forEach(c=>{const j=mx[+c.dataset.i];if(j===undefined||!done.has(cur+'X'+c.dataset.i))return;const st=pool(p)[j];const set=(r,v)=>{const f=c.querySelector(`[data-r=${r}]`);f.dataset.v=v;f.classList.add('ok');paint(f)};set('L',sv(st[2]));set('R',sv(st[3]));set('C',st[4]?st[4][0]:'');c.querySelector('.arr').textContent=st[5]?'⇄':'→';c.querySelector('.rs').innerHTML='<span class="good">正解！</span> '+st[0]+'：'+sb(st[1])})}
@@ -217,12 +234,16 @@ function check(card){
   mark(g('L'),a);mark(g('R'),b);mark(g('C'),c);if(!d){ok=false;bad.push('矢印')}
   if(!a)bad.push('左辺');if(!b)bad.push('右辺');if(!c)bad.push(st[4]?'触媒':'触媒（この反応は触媒なし）');
  }
+ const dq=[...card.querySelectorAll('.dq')];let qng=false;
+ dq.forEach(x=>{const g=x.value===x.dataset.a;x.classList.remove('ok','ng');x.classList.add(g?'ok':'ng');if(!g){ok=false;qng=true}});
+ if(qng)bad.push('説明文の穴埋め');
  rs.innerHTML=ok?'<span class="good">正解！</span>':'<span class="bad">まちがいがあります。</span>'+(bad.length?' 見直し：'+bad.join('・'):'')+'（赤い欄）';
  if(ok){done.add(cur+m+(m==='3'?0:card.dataset.i));card.classList.add('done')}
  upd();
 }
 function upd(){document.querySelectorAll('.tabs button').forEach(b=>{const m=b.dataset.m;b.textContent=modes(P[cur]).find(x=>x[0]===m)[1]+'（'+cnt(m,P[cur])+'）'})}
 function getStep(card){return card.dataset.i==='a'?P[cur].all:P[cur].steps[+card.dataset.i]}
+document.addEventListener('change',e=>{const x=e.target.closest('.dq');if(x)x.classList.remove('ok','ng')});
 document.addEventListener('click',e=>{
  const t=e.target;
  let b=t.closest('[data-p]');if(b){cur=+b.dataset.p;show();return}
@@ -231,7 +252,7 @@ document.addEventListener('click',e=>{
  if(t.closest('.allans')){const el=$('#xall');el.innerHTML=pool(P[cur]).map(st=>'<div class="hd"><b>'+st[0]+'</b>　'+sb(st[1])+'</div><div class="eq">'+stat(st)+'</div>').join('');return}
  const card=t.closest('.st');
  if(t.closest('.chk'))return check(card);
- if(t.closest('.ans')){const rs=card.querySelector('.rs');rs.innerHTML=card.dataset.m==='4'?'答え：約1.1 kg（2×58.5 ÷ 106 ≒ 1.10）':'<div class="eq">'+stat(getStep(card))+'</div>';return}
+ if(t.closest('.ans')){const rs=card.querySelector('.rs');card.querySelectorAll('.dq').forEach(x=>{x.value=x.dataset.a;x.classList.remove('ng');x.classList.add('ok')});rs.innerHTML=card.dataset.m==='4'?'答え：約1.1 kg（2×58.5 ÷ 106 ≒ 1.10）':'<div class="eq">'+stat(getStep(card))+'</div>';return}
  if(t.closest('.hint')){card.querySelector('.rs').textContent=P[cur].hint;return}
  const ar=t.closest('.arr[data-flip]');if(ar){ar.textContent=ar.textContent==='→'?'⇄':'→';return}
 });
