@@ -34,6 +34,7 @@ ul.pts{margin:0;padding:12px 14px 12px 30px;background:var(--card);border-left:4
 .f.act{background:color-mix(in srgb,var(--ac) 25%,transparent)}
 .ct .f{border:2px dashed var(--cat);border-radius:6px;min-width:60px;min-height:32px;line-height:28px;font-size:15px}
 .f.ok{border-color:var(--ok);color:var(--ok)}.f.ng{border-color:var(--ng);color:var(--ng)}
+.c{cursor:text}
 .cr{display:inline-block;width:2px;height:1.1em;background:var(--ink);vertical-align:middle;animation:b 1s steps(1) infinite}
 @keyframes b{50%{opacity:0}}@media (prefers-reduced-motion:reduce){.cr{animation:none}}
 .ac{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
@@ -64,12 +65,13 @@ ul.pts{margin:0;padding:12px 14px 12px 30px;background:var(--card);border-left:4
 <div>
 <button data-t=" + ">＋</button><button data-ar="→">→</button><button data-ar="⇄">⇄</button>
 <button class="ctl" data-j="L">左辺</button><button class="ctl" data-j="C">触媒枠</button><button class="ctl" data-j="R">右辺</button>
-<button data-x="bs">⌫</button><button class="dl" data-x="cl">消す</button>
+<button data-mv="-1">◀</button><button data-mv="1">▶</button><button data-x="bs">⌫</button><button class="dl" data-x="cl">消す</button>
 </div>
 </div>
 <script>
 const $=s=>document.querySelector(s);
-const fmt=(s,num)=>{let o='',co=true;for(const c of s){if(c===' '){o+=' ';co=true;continue}if(/\d/.test(c)){o+=(num||co)?c:'<sub>'+c+'</sub>';continue}co=false;o+=c}return o};
+const CR='<i class="cr"></i>';
+const fmt=(s,num,pos)=>{let o='',co=true;const n=s.length;for(let i=0;i<n;i++){const c=s[i];if(i===pos)o+=CR;let h;if(c===' '){h=' ';co=true}else if(/\d/.test(c)){h=(num||co)?c:'<sub>'+c+'</sub>'}else{co=false;h=c}o+=pos===undefined?h:'<span class="c" data-i="'+i+'">'+h+'</span>'}if(pos===n)o+=CR;return o};
 const nm=s=>(s||'').replace(/\s/g,'');
 // [式番号, 説明, 左辺, 右辺, 触媒(許容リスト)|null, 可逆]
 const P=[
@@ -112,10 +114,13 @@ function eq(st,m){
  if(m==='1')return st[2].map(([c,f])=>(c>1?c:'')+bl(f)).join(pl)+arrow(st,st[4]?bl(st[4].join('|')):'')+st[3].map(([c,f])=>(c>1?bl(c):'')+fmt(f)).join(pl);
  return `<span class="f" data-r="L" data-ph="左辺"></span>`+arrow(st,`<span class="f" data-r="C" data-ph="触媒"></span>`).replace('arr"','arr" data-flip="1"')+`<span class="f" data-r="R" data-ph="右辺"></span>`;
 }
-function paint(f){const v=f.dataset.v||'';f.innerHTML=fmt(v,f.hasAttribute('data-num'))+(f===act?'<i class="cr"></i>':'');f.classList.toggle('act',f===act);if(v)f.removeAttribute('data-e');else f.setAttribute('data-e','1')}
-function setAct(f){const o=act;act=f;if(o)paint(o);if(f)paint(f)}
-function put(t){if(!act)return;act.dataset.v=(act.dataset.v||'')+t;act.classList.remove('ok','ng');paint(act)}
-function bs(){if(!act)return;let v=act.dataset.v||'';act.dataset.v=v.endsWith(' + ')?v.slice(0,-3):v.slice(0,-1);act.classList.remove('ok','ng');paint(act)}
+const gp=f=>{const v=f.dataset.v||'';return f.dataset.p===undefined?v.length:Math.max(0,Math.min(+f.dataset.p,v.length))};
+function paint(f){const v=f.dataset.v||'';f.innerHTML=fmt(v,f.hasAttribute('data-num'),f===act?gp(f):undefined);f.classList.toggle('act',f===act);if(v)f.removeAttribute('data-e');else f.setAttribute('data-e','1')}
+function setAct(f,p){const o=act;act=f;if(f&&p!==undefined)f.dataset.p=p;if(o&&o!==f)delete o.dataset.p;if(o)paint(o);if(f)paint(f)}
+function edit(v,p){act.dataset.v=v;act.dataset.p=p;act.classList.remove('ok','ng');paint(act)}
+function put(t){if(!act)return;const v=act.dataset.v||'',p=gp(act);edit(v.slice(0,p)+t+v.slice(p),p+t.length)}
+function bs(){if(!act)return;const v=act.dataset.v||'',p=gp(act);if(!p)return;const k=v.slice(p-3,p)===' + '?3:1;edit(v.slice(0,p-k)+v.slice(p),p-k)}
+function mv(d){if(!act)return;const v=act.dataset.v||'',q=gp(act);let p=q+d;if(d<0&&v.slice(q-3,q)===' + ')p=q-3;else if(d>0&&v.slice(q,q+3)===' + ')p=q+3;act.dataset.p=Math.max(0,Math.min(p,v.length));paint(act)}
 function nav(){$('#nav').innerHTML=P.map((p,i)=>`<button data-p="${i}" aria-pressed="${i===cur}">${p.n}</button>`).join('')}
 function modes(p){const a=[['1','レベル1 穴埋め'],['2','レベル2 全部書く']];if(p.all)a.push(['3','まとめ式']);if(p.calc)a.push(['4','計算問題']);return a}
 function cnt(m,p){const n=m==='3'?1:p.steps.length;let c=0;for(let i=0;i<n;i++)if(done.has(cur+m+i))c++;return m==='4'?(done.has(cur+'4')?'1/1':'0/1'):c+'/'+n}
@@ -166,7 +171,7 @@ document.addEventListener('click',e=>{
  const t=e.target;
  let b=t.closest('[data-p]');if(b){cur=+b.dataset.p;show();return}
  b=t.closest('.tabs [data-m]');if(b){mode=b.dataset.m;show();return}
- const f=t.closest('.f');if(f){setAct(f);return}
+ const f=t.closest('.f');if(f){let p;const c=t.closest('.c');if(c){const r=c.getBoundingClientRect();p=+c.dataset.i+(e.clientX>r.left+r.width/2?1:0)}setAct(f,p);return}
  const card=t.closest('.st');
  if(t.closest('.chk'))return check(card);
  if(t.closest('.ans')){const rs=card.querySelector('.rs');rs.innerHTML=card.dataset.m==='4'?'答え：約1.1 kg（2×58.5 ÷ 106 ≒ 1.10）':'<div class="eq">'+stat(getStep(card))+'</div>';return}
@@ -177,14 +182,17 @@ $('#kb').addEventListener('mousedown',e=>e.preventDefault());
 $('#kb').addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
  const d=b.dataset;
- if(d.x==='bs')bs();else if(d.x==='cl'){if(act){act.dataset.v='';act.classList.remove('ok','ng');paint(act)}}
+ if(d.x==='bs')bs();else if(d.x==='cl'){if(act){act.dataset.v='';act.dataset.p=0;act.classList.remove('ok','ng');paint(act)}}
  else if(d.ar){const a=act&&act.closest('.eq')&&act.closest('.eq').querySelector('.arr[data-flip]');if(a)a.textContent=d.ar}
+ else if(d.mv){mv(+d.mv)}
  else if(d.j){const q=act&&act.closest('.eq');const f=q&&q.querySelector(`[data-r=${d.j}]`);if(f)setAct(f)}
  else put(d.t!==undefined?d.t:b.textContent);
 });
 document.addEventListener('keydown',e=>{
  if(!act||e.ctrlKey||e.metaKey)return;
  if(e.key==='Backspace'){e.preventDefault();bs()}
+ else if(e.key==='ArrowLeft'){e.preventDefault();mv(-1)}
+ else if(e.key==='ArrowRight'){e.preventDefault();mv(1)}
  else if(e.key==='+'){e.preventDefault();put(' + ')}
  else if(/^[A-Za-z0-9().]$/.test(e.key)){e.preventDefault();put(e.key)}
 });
